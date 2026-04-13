@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CAETANO RPG">
 <meta name="theme-color" content="#020408">
-<title>CAETANO · ASCENSÃO V22</title>
+<title>CAETANO · ASCENSÃO V23</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
@@ -1504,7 +1504,7 @@ body.theme-douchebag::before { background: repeating-linear-gradient(0deg, trans
   <div id="mainMenuScreen">
     <div style="text-align:center;">
       <div class="menu-glitch">⚡ CAETANO · ASCENSÃO ⚡</div>
-      <div class="menu-subtitle">Sistema de Evolução Pessoal · V22</div>
+      <div class="menu-subtitle">Sistema de Evolução Pessoal · V19</div>
     </div>
     <nav class="menu-nav">
       <button class="menu-btn-rpg" id="btnJogar"><i class="fas fa-play"></i> JOGAR</button>
@@ -2242,7 +2242,24 @@ function saveFriends() { localStorage.setItem('FriendsList', JSON.stringify(frie
 let agendaEvents = [];
 function loadAgenda() { let s = localStorage.getItem('AgendaEvents'); if(s) try { agendaEvents = JSON.parse(s); } catch(e){} }
 function saveAgenda() { localStorage.setItem('AgendaEvents', JSON.stringify(agendaEvents)); }
-function getTodayStr() { return new Date().toISOString().split('T')[0]; }
+// ===== DATA NO HORÁRIO DE BRASÍLIA (UTC-3) =====
+function nowBrasilia() {
+  // Sempre retorna a data/hora atual no fuso de Brasília
+  return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+}
+function getTodayStr() {
+  const d = nowBrasilia();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+function formatDateBR(dateStr) {
+  // '2025-01-15' → '15/01/2025'
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-');
+  return `${d}/${m}/${y}`;
+}
 function todayEvents() { return agendaEvents.filter(e => e.date === getTodayStr()); }
 function renderAgendaDropdown() {
   const list = document.getElementById('agendaEventsList');
@@ -2280,7 +2297,7 @@ function openFullCalendar() {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month+1, 0).getDate();
     const prevDays = new Date(year, month, 0).getDate();
-    const todayD = new Date(); const todayStr2 = getTodayStr();
+    const todayD = nowBrasilia(); const todayStr2 = getTodayStr();
     let selectedDate = todayStr2;
     function pad(n){return String(n).padStart(2,'0');}
     function dateStr(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`;}
@@ -2609,7 +2626,7 @@ function openNotepad(activeSkillId) {
       const txt = ov.querySelector('#npText').value.trim();
       if (!txt) return;
       if (!notepadData[activeSkillId]) notepadData[activeSkillId] = [];
-      const now = new Date();
+      const now = nowBrasilia();
       const dateStr = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`;
       notepadData[activeSkillId].push({ date: dateStr, text: txt });
       saveNotepad();
@@ -2767,7 +2784,7 @@ let conquestLog = [];
 function loadLog() { let s = localStorage.getItem('ConquestLog_V18'); if(s) try { conquestLog = JSON.parse(s); } catch(e){} }
 function saveLog() { localStorage.setItem('ConquestLog_V18', JSON.stringify(conquestLog.slice(0,200))); }
 function addToLog(text, color='#FFD700') {
-  const now = new Date();
+  const now = nowBrasilia();
   const date = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}`;
   conquestLog.unshift({ text, color, date, ts: Date.now() });
   saveLog();
@@ -2938,11 +2955,11 @@ function loadDungeon() { let s = localStorage.getItem('DungeonProgress_V18'); if
 function saveDungeon() { localStorage.setItem('DungeonProgress_V18', JSON.stringify(dungeonProgress)); }
 
 function getCurrentDungeon() {
-  const month = new Date().getMonth();
+  const month = nowBrasilia().getMonth();
   return DUNGEONS[month];
 }
 
-function getDungeonKey() { const d = new Date(); return `${d.getFullYear()}_${d.getMonth()}`; }
+function getDungeonKey() { const d = nowBrasilia(); return `${d.getFullYear()}_${d.getMonth()}`; }
 
 function renderDungeon() {
   const panel = document.getElementById('sectionPanel');
@@ -2950,7 +2967,8 @@ function renderDungeon() {
   const key = getDungeonKey();
   if (!dungeonProgress[key]) dungeonProgress[key] = { objsDone: [], claimed: false };
   const dp = dungeonProgress[key];
-  const daysLeft = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate() - new Date().getDate();
+  const _brNow = nowBrasilia();
+  const daysLeft = new Date(_brNow.getFullYear(), _brNow.getMonth()+1, 0).getDate() - _brNow.getDate();
   const donePct = dp.objsDone.length / dungeon.objectives.length * 100;
 
   panel.innerHTML = `<div class="section-wrap" style="--section-color:${dungeon.color};">
@@ -2980,7 +2998,7 @@ function renderDungeon() {
     <div style="margin-top:16px;">
       <div class="section-title" style="color:${dungeon.color};font-size:0.65rem;"><i class="fas fa-calendar-alt"></i><span>PRÓXIMAS DUNGEONS</span><div class="title-line" style="background:linear-gradient(90deg,${dungeon.color},transparent);"></div></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:10px;">
-        ${DUNGEONS.slice(0,12).filter((_,i)=>i!==new Date().getMonth()).slice(0,4).map(d=>`
+        ${DUNGEONS.slice(0,12).filter((_,i)=>i!==nowBrasilia().getMonth()).slice(0,4).map(d=>`
           <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;">
             <div style="font-family:var(--font-head);font-size:0.6rem;color:${d.color};letter-spacing:1px;margin-bottom:4px;">${d.icon} ${d.name.split('·')[0].trim()}</div>
             <div style="font-size:0.7rem;color:var(--text-dim);">${d.name.split('·')[1]?.trim()}</div>
@@ -3027,8 +3045,8 @@ function saveLastActive() { localStorage.setItem('LastActiveDate_V18', getTodayS
 
 function checkPenalty() {
   if (!lastActiveDate || lastActiveDate === getTodayStr()) return;
-  const last = new Date(lastActiveDate);
-  const now = new Date();
+  const last = new Date(lastActiveDate + 'T00:00:00-03:00'); // Brasilia
+  const now  = nowBrasilia();
   const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
   if (diffDays >= 2) {
     showPenaltyModal(diffDays);
@@ -3091,23 +3109,66 @@ function requestNotifPermission() {
 }
 
 function scheduleAgendaNotifications() {
-  if (!('Notification' in window) || notifPermission !== 'granted') return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
   const today = getTodayStr();
   const todayEvs = agendaEvents.filter(e => e.date === today);
+  if (!todayEvs.length) return;
+
   todayEvs.forEach(ev => {
-    const [h,m] = ev.time.split(':').map(Number);
-    // Notify 2h before
-    const notifTime = new Date();
-    notifTime.setHours(h - 2, m, 0, 0);
-    const msUntil = notifTime - new Date();
-    if (msUntil > 0) {
+    const [evH, evM] = ev.time.split(':').map(Number);
+
+    // Hora atual em Brasília
+    const nowBR = nowBrasilia();
+    const nowH = nowBR.getHours();
+    const nowMin = nowBR.getMinutes();
+    const nowTotalMin = nowH * 60 + nowMin;
+    const evTotalMin  = evH * 60 + evM;
+
+    // Notificação 4 horas antes
+    const notif4hMin = evTotalMin - 240; // 4h = 240 min antes
+    const ms4h = (notif4hMin - nowTotalMin) * 60 * 1000;
+    if (ms4h > 0) {
       setTimeout(() => {
-        new Notification(`⏰ ${ev.emoji} ${ev.name}`, {
-          body: `Em 2 horas — ${ev.time}`,
-          icon: '⚡',
-          tag: ev.id
-        });
-      }, msUntil);
+        if (Notification.permission === 'granted') {
+          new Notification(`⏰ ${ev.emoji} ${ev.name}`, {
+            body: `Em 4 horas — ${ev.time} | Hoje você tem um compromisso!`,
+            tag: `agenda_4h_${ev.id}`,
+            requireInteraction: true,
+            icon: '⚡'
+          });
+        }
+      }, ms4h);
+    }
+
+    // Notificação 30 minutos antes
+    const notif30min = evTotalMin - 30;
+    const ms30 = (notif30min - nowTotalMin) * 60 * 1000;
+    if (ms30 > 0) {
+      setTimeout(() => {
+        if (Notification.permission === 'granted') {
+          new Notification(`🚨 ${ev.emoji} ${ev.name} em 30 MINUTOS!`, {
+            body: `Compromisso às ${ev.time} — prepare-se!`,
+            tag: `agenda_30m_${ev.id}`,
+            requireInteraction: true,
+            icon: '⚡'
+          });
+        }
+      }, ms30);
+    }
+
+    // Notificação na hora exata
+    const msExact = (evTotalMin - nowTotalMin) * 60 * 1000;
+    if (msExact > 0) {
+      setTimeout(() => {
+        if (Notification.permission === 'granted') {
+          new Notification(`📍 AGORA: ${ev.emoji} ${ev.name}`, {
+            body: `Seu compromisso das ${ev.time} está começando!`,
+            tag: `agenda_now_${ev.id}`,
+            requireInteraction: true,
+            icon: '⚡'
+          });
+        }
+      }, msExact);
     }
   });
 }
@@ -4042,7 +4103,7 @@ function init() {
   setScreen('menu');
   refreshStatsUI();
   saveLastActive();
-  if (notifPermission === 'granted') scheduleAgendaNotifications();
+  if (Notification?.permission === 'granted') scheduleAgendaNotifications();
   setTimeout(() => checkPenalty(), 1500);
 }
 init();
