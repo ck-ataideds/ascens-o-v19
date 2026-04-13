@@ -2,12 +2,12 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CAETANO RPG">
 <meta name="theme-color" content="#020408">
-<title>CAETANO · ASCENSÃO V19</title>
+<title>CAETANO · ASCENSÃO V22</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
@@ -869,13 +869,413 @@ body::before {
 .cal-close { background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;padding:8px 20px;border-radius:6px;cursor:pointer;font-family:var(--font-head);font-size:0.65rem;letter-spacing:2px;margin-top:14px;width:100%;transition:var(--transition); }
 .cal-close:hover { background:rgba(244,63,94,0.2); }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RANK PANEL ===== */
+.rank-panel-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.88);
+  backdrop-filter:blur(14px); z-index:6000;
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn 0.2s ease;
+}
+.rank-panel-box {
+  background:rgba(4,0,20,0.98);
+  border:1px solid rgba(168,85,247,0.5);
+  border-radius:18px; padding:26px;
+  max-width:440px; width:92%;
+  max-height:88vh; overflow-y:auto;
+  animation:bounceIn 0.3s ease;
+}
+.rank-panel-box h2 {
+  font-family:var(--font-head); font-size:0.75rem;
+  letter-spacing:5px; color:#a855f7;
+  text-align:center; margin-bottom:6px;
+}
+.rank-panel-subtitle {
+  text-align:center; font-size:0.7rem; color:var(--text-dim);
+  margin-bottom:18px;
+}
+.rank-row-item {
+  display:flex; align-items:center; gap:12px;
+  padding:11px 14px; margin-bottom:6px;
+  border-radius:8px; border:1px solid rgba(255,255,255,0.05);
+  transition:var(--transition);
+}
+.rank-row-item.is-current {
+  border-color:var(--rc); background:rgba(255,255,255,0.04);
+}
+.rank-row-letter {
+  font-family:var(--font-head); font-size:1.3rem; font-weight:900;
+  min-width:38px; text-align:center;
+}
+.rank-row-info { flex:1; }
+.rank-row-name { font-size:0.82rem; margin-bottom:2px; }
+.rank-row-req  { font-size:0.65rem; color:var(--text-dim); }
+.rank-current-tag {
+  font-family:var(--font-head); font-size:0.55rem; letter-spacing:2px;
+  padding:3px 8px; border-radius:3px;
+}
+.rank-panel-close {
+  width:100%; margin-top:14px; padding:10px;
+  background:rgba(168,85,247,0.08);
+  border:1px solid rgba(168,85,247,0.3);
+  color:#a855f7; font-family:var(--font-head); font-size:0.65rem;
+  letter-spacing:3px; cursor:pointer; border-radius:6px;
+  transition:var(--transition);
+}
+.rank-panel-close:hover { background:rgba(168,85,247,0.18); }
+
+/* Make rank badge clickable */
+.rank-badge-hero { cursor:pointer; }
+.rank-badge-hero:hover { filter:brightness(1.25); transform:scale(1.03); }
+
+/* ===== NOTEPAD ===== */
+.notepad-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.88);
+  backdrop-filter:blur(14px); z-index:6000;
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn 0.2s ease;
+}
+.notepad-box {
+  background:rgba(4,0,20,0.98);
+  border:1px solid rgba(255,215,0,0.3);
+  border-radius:18px; padding:22px;
+  max-width:520px; width:94%;
+  max-height:90vh; display:flex; flex-direction:column;
+  animation:bounceIn 0.3s ease;
+}
+.notepad-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:12px; padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.notepad-title { font-family:var(--font-head); font-size:0.7rem; letter-spacing:4px; color:var(--gold); }
+.notepad-x {
+  background:none; border:1px solid rgba(255,255,255,0.15); color:var(--text-dim);
+  width:26px; height:26px; border-radius:50%; cursor:pointer; font-size:0.8rem;
+  transition:var(--transition);
+}
+.notepad-x:hover { background:rgba(244,63,94,0.15); border-color:#f43f5e; color:#f43f5e; }
+.notepad-skill-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.notepad-skill-tab {
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+  color:var(--text-dim); font-family:var(--font-head); font-size:0.58rem;
+  letter-spacing:1px; padding:5px 11px; border-radius:4px; cursor:pointer;
+  transition:var(--transition);
+}
+.notepad-skill-tab.active {
+  background:rgba(255,215,0,0.1); border-color:var(--gold); color:var(--gold);
+}
+.notepad-entries { flex:1; overflow-y:auto; min-height:150px; margin-bottom:12px; }
+.notepad-entry {
+  background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);
+  border-radius:8px; padding:10px 12px; margin-bottom:7px; position:relative;
+}
+.notepad-entry-date { font-family:var(--font-head); font-size:0.55rem; color:var(--text-dim); margin-bottom:4px; }
+.notepad-entry-text { font-size:0.8rem; color:var(--text); line-height:1.5; white-space:pre-wrap; }
+.notepad-del {
+  position:absolute; top:8px; right:8px;
+  background:none; border:none; color:rgba(244,63,94,0.4);
+  cursor:pointer; font-size:0.75rem; transition:var(--transition);
+}
+.notepad-del:hover { color:#f43f5e; }
+.notepad-write { border-top:1px solid rgba(255,255,255,0.06); padding-top:12px; }
+.notepad-textarea {
+  width:100%; background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.1); border-radius:8px;
+  color:var(--text); font-size:0.82rem; padding:10px 12px;
+  resize:none; height:78px; font-family:var(--font-body);
+  transition:var(--transition);
+}
+.notepad-textarea:focus { outline:none; border-color:var(--gold); }
+.notepad-save {
+  margin-top:7px; width:100%; padding:9px;
+  background:linear-gradient(90deg,rgba(255,180,70,0.1),rgba(255,215,0,0.1));
+  border:1px solid var(--gold); color:var(--gold);
+  font-family:var(--font-head); font-size:0.65rem; letter-spacing:3px;
+  cursor:pointer; border-radius:6px; transition:var(--transition);
+}
+.notepad-save:hover { background:var(--gold); color:#000; }
+
+/* Skill picker bottom sheet */
+.skill-picker-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(10px); z-index:6000;
+  display:flex; align-items:flex-end; justify-content:center;
+  animation:fadeIn 0.2s ease;
+}
+.skill-picker-box {
+  background:rgba(4,0,20,0.99);
+  border:1px solid rgba(255,215,0,0.25);
+  border-radius:18px 18px 0 0; padding:20px 18px 28px;
+  width:100%; max-width:480px;
+  animation:slideUpAnim 0.3s ease;
+}
+@keyframes slideUpAnim { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.skill-picker-title {
+  font-family:var(--font-head); font-size:0.7rem; letter-spacing:4px;
+  color:var(--gold); text-align:center; margin-bottom:16px;
+}
+.skill-option {
+  display:flex; align-items:center; gap:14px;
+  padding:12px 14px; margin-bottom:7px;
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+  border-radius:10px; cursor:pointer; transition:var(--transition);
+}
+.skill-option:hover { background:rgba(255,215,0,0.05); border-color:rgba(255,215,0,0.3); transform:translateX(4px); }
+.skill-option-icon { font-size:1.4rem; min-width:28px; text-align:center; }
+.skill-option-name { flex:1; font-size:0.85rem; }
+.skill-option-count { font-family:var(--font-head); font-size:0.6rem; color:var(--text-dim); }
+.skill-picker-cancel {
+  width:100%; margin-top:8px; padding:9px;
+  background:transparent; border:1px solid rgba(255,255,255,0.1);
+  color:var(--text-dim); font-family:var(--font-head); font-size:0.65rem;
+  letter-spacing:3px; cursor:pointer; border-radius:6px;
+  transition:var(--transition);
+}
+.skill-picker-cancel:hover { border-color:rgba(244,63,94,0.4); color:#f43f5e; }
+
+/* Special routine task button */
+.routine-item-special {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 14px; margin-bottom:8px;
+  background:rgba(255,215,0,0.03);
+  border:1px solid rgba(255,215,0,0.15);
+  border-radius:8px; cursor:pointer; transition:var(--transition);
+}
+.routine-item-special:hover {
+  background:rgba(255,215,0,0.07); border-color:rgba(255,215,0,0.35);
+  transform:translateX(4px);
+}
+.routine-item-special.done { opacity:0.45; cursor:default; }
+.routine-item-special .routine-text { flex:1; font-size:0.82rem; }
+.routine-item-special .open-hint {
+  font-family:var(--font-head); font-size:0.55rem; letter-spacing:1px;
+  color:var(--gold2); padding:3px 8px; border-radius:3px;
+  background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.2);
+}
+
+/* ===== MOBILE FIRST — iPhone optimizado ===== */
+
+/* Previne zoom no double-tap e melhora toque */
+* { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+input, textarea, select, button { font-size: 16px !important; } /* Evita zoom automático no iOS */
+
+/* Safe area iPhone (notch + home indicator) */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Header fixo — mobile */
+.game-header {
+  position: sticky; top: 0; z-index: 100;
+  padding-top: max(10px, env(safe-area-inset-top));
+}
+
+/* Music player acima do home indicator */
+.music-player {
+  bottom: max(16px, env(safe-area-inset-bottom));
+}
+
 @media (max-width: 768px) {
-  .hub-hero { grid-template-columns: 1fr; }
+  /* ── MENU PRINCIPAL ── */
+  #mainMenuScreen {
+    padding: max(60px, calc(env(safe-area-inset-top) + 40px)) 20px 40px;
+    gap: 28px;
+  }
+  .menu-glitch { font-size: clamp(1.4rem, 7vw, 2.4rem); letter-spacing: 2px; }
+  .menu-subtitle { font-size: 0.65rem; letter-spacing: 4px; }
+  .menu-nav { width: 100%; max-width: 320px; gap: 10px; }
+  .menu-btn-rpg {
+    font-size: 0.8rem; padding: 16px 20px;
+    min-height: 52px; /* touch target mínimo Apple HIG */
+  }
+
+  /* ── HEADER DO JOGO ── */
+  .game-header {
+    padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    align-items: center;
+  }
+  .hero-info {
+    flex: 1; display: flex; flex-wrap: wrap;
+    gap: 4px; align-items: center; justify-content: center;
+    order: 2; width: 100%;
+  }
+  .hero-name { font-size: 0.9rem; }
+  .badge { font-size: 0.5rem; padding: 3px 8px; letter-spacing: 0; }
+  .coins-badge { font-size: 0.6rem; padding: 3px 10px; }
+  .header-actions { order: 3; gap: 6px; margin-left: auto; }
+
+  /* Botões do header — touch targets maiores */
+  .icon-btn { width: 38px; height: 38px; font-size: 0.9rem; }
+  .agenda-notif-btn { width: 38px; height: 38px; }
+  .logs-icon-btn { font-size: 0.55rem; padding: 5px 10px; min-height: 38px; }
+  .back-btn {
+    font-size: 0.6rem; padding: 8px 14px;
+    min-height: 38px; min-width: 70px;
+  }
+
+  /* Agenda dropdown — ocupa tela toda no mobile */
+  .agenda-dropdown {
+    position: fixed; top: auto; bottom: 0;
+    left: 0; right: 0; width: 100%;
+    max-height: 60vh; overflow-y: auto;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px max(20px, env(safe-area-inset-bottom));
+  }
+
+  /* ── HUB ── */
+  .hub-hero { grid-template-columns: 1fr; gap: 12px; }
+  .avatar-card { padding: 16px; }
+  .avatar-frame { width: 100px; height: 100px; }
+  .stats-card { padding: 14px; }
+  .stat-row { margin-bottom: 10px; }
+  .stat-row-name { font-size: 0.65rem; }
+  .stat-row-val { font-size: 0.6rem; }
+  .stat-track { height: 5px; }
+
+  /* Hub cards — 2 colunas no mobile */
+  .hub-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .hub-card {
+    padding: 16px 10px;
+    min-height: 90px;
+  }
+  .hub-card i { font-size: 1.5rem; margin-bottom: 6px; }
+  .hub-card h3 { font-size: 0.6rem; letter-spacing: 1px; }
+  .hub-card p { font-size: 0.55rem; }
+
+  /* ── SEÇÕES ── */
+  .section-wrap { padding: 14px; border-radius: 12px; }
+  .section-title { font-size: 0.65rem; letter-spacing: 2px; margin-bottom: 14px; }
+
+  /* Tabs maiores para toque */
+  .tabs { gap: 6px; margin-bottom: 14px; }
+  .tab {
+    font-size: 0.6rem; padding: 9px 14px;
+    min-height: 38px;
+  }
+
+  /* ── ROTINA ── */
+  .routine-item {
+    padding: 10px 12px; gap: 8px; margin-bottom: 6px;
+    min-height: 48px;
+  }
+  .routine-text { font-size: 0.78rem; }
+  .routine-time { font-size: 0.55rem; min-width: 65px; }
+  .routine-exp { font-size: 0.6rem; }
+  .routine-coin { font-size: 0.6rem; }
+  .routine-item-special {
+    padding: 10px 12px; gap: 8px; min-height: 48px;
+  }
+  .toggle-sw { width: 40px; height: 20px; flex-shrink: 0; }
+  .toggle-sw::before { width: 14px; height: 14px; }
+  .toggle-sw:checked::before { transform: translateX(19px); }
+
+  /* ── EXPERIÊNCIAS ── */
+  .cat-header { padding: 12px 14px; font-size: 0.65rem; }
+  .sub-btn { padding: 10px 12px; font-size: 0.78rem; min-height: 44px; }
+  .task-row { padding: 8px 10px; min-height: 44px; font-size: 0.75rem; }
+  .task-reward { font-size: 0.6rem; }
+
+  /* ── STATS ── */
+  .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+  .stat-card { padding: 14px; }
+  .stat-item { font-size: 0.78rem; }
+
+  /* ── SWAG ── */
   .swag-sidebar { flex: 0 0 100%; }
-  .swag-layout { flex-direction: column; }
-  .game-header { padding: 8px 12px; }
-  .menu-glitch { font-size: clamp(1.5rem,8vw,3rem); }
+  .swag-layout { flex-direction: column; gap: 10px; }
+  .swag-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .swag-cat-item { padding: 10px 12px; min-height: 44px; }
+
+  /* ── AMIGOS ── */
+  .friends-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* ── LOJA ── */
+  .shop-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── MODAIS ── */
+  .modal-box {
+    padding: 20px 16px;
+    border-radius: 16px;
+    margin: 16px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal-title { font-size: 0.7rem; letter-spacing: 3px; }
+  .modal-btn { padding: 12px 20px; min-height: 44px; font-size: 0.65rem; }
+  .modal-input { font-size: 16px !important; padding: 12px 14px; } /* 16px evita zoom iOS */
+
+  /* ── LOG PANEL ── */
+  .log-slide-panel {
+    width: 100%; right: -100%;
+    padding: 20px 16px max(20px, env(safe-area-inset-bottom));
+  }
+  .log-slide-panel.open { right: 0; }
+
+  /* ── MUSIC PLAYER ── */
+  .music-player {
+    padding: 5px 10px; gap: 8px;
+    border-radius: 30px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .mp-label { display: none; }
+  .mp-vol { width: 55px; }
+  .mp-btn { width: 30px; height: 30px; font-size: 0.75rem; }
+
+  /* ── RANK PANEL ── */
+  .rank-panel-box {
+    max-height: 85vh; padding: 20px 16px;
+    border-radius: 16px; margin: 12px;
+  }
+  .rank-row-item { padding: 10px 12px; min-height: 48px; }
+  .rank-row-letter { font-size: 1.1rem; min-width: 32px; }
+  .rank-panel-close { min-height: 44px; }
+
+  /* ── NOTEPAD ── */
+  .notepad-box {
+    border-radius: 16px 16px 0 0;
+    max-height: 90vh;
+    padding: 18px 16px max(20px, env(safe-area-inset-bottom));
+  }
+  .notepad-skill-tab { font-size: 0.6rem; padding: 6px 10px; min-height: 36px; }
+  .notepad-save { min-height: 44px; font-size: 0.7rem; }
+
+  /* ── SKILL PICKER ── */
+  .skill-picker-box {
+    padding: 18px 16px max(24px, env(safe-area-inset-bottom));
+  }
+  .skill-option { min-height: 52px; }
+  .skill-picker-cancel { min-height: 44px; }
+
+  /* ── OPÇÕES ── */
+  .options-grid { grid-template-columns: 1fr; gap: 12px; }
+  .option-row { min-height: 44px; gap: 10px; }
+  .opt-btn { min-height: 36px; padding: 8px 14px; font-size: 0.6rem; }
+
+  /* ── GERAL ── */
+  .panel { padding: 10px; }
+  .section-wrap { min-height: auto; }
+
+  /* Scroll suave no iOS */
+  .notepad-entries,
+  .rank-panel-box,
+  .modal-box,
+  .stat-table-box { -webkit-overflow-scrolling: touch; }
+}
+
+/* iPhone SE e telas muito pequenas */
+@media (max-width: 375px) {
+  .hub-cards { grid-template-columns: repeat(2, 1fr); }
+  .hub-card { padding: 12px 8px; }
+  .hub-card h3 { font-size: 0.55rem; }
+  .menu-glitch { font-size: 1.3rem; }
+  .game-header { padding: 6px 10px; }
+  .badge { display: none; } /* esconde badges menores em telas mínimas */
+  .coins-badge { font-size: 0.55rem; }
 }
 
 /* ===== RANK SYSTEM (Solo Leveling) ===== */
@@ -1077,6 +1477,7 @@ body.theme-douchebag::before { background: repeating-linear-gradient(0deg, trans
 .log-panel-close { background:none; border:1px solid rgba(139,92,246,0.3); color:#8b5cf6; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:0.8rem; transition:var(--transition); }
 .log-panel-close:hover { background:rgba(139,92,246,0.2); }
 
+.notif-perm-bar {
   background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.3);
   border-radius:10px; padding:10px 16px;
   display:flex; align-items:center; gap:12px; margin-bottom:14px;
@@ -1434,34 +1835,61 @@ function updateCoinsUI() { document.querySelectorAll('#coinsDisplay,#shopCoins')
 // ===================================================================
 // ======================== EXP SYSTEM ================================
 // ===================================================================
-const EXP_TABLE = [0, 50, 150, 300, 550, 950, 1500, 2300, 3400, 5000, 7000];
-// 11 levels: 1-10 visible, each check = meaningful progress
+// ===== SISTEMA DE NÍVEIS 1-100 =====
+// Cada stat vai de 1 a 100. EXP_PER_LEVEL = 100.
+// Cada check numa task de Experiência dá EXP baseado na dificuldade:
+//   fácil  = 5 EXP  (nível sobe a cada ~20 tasks fáceis)
+//   média  = 8 EXP  (nível sobe a cada ~12 tasks médias)
+//   difícil = 15 EXP (nível sobe a cada ~7 tasks difíceis)
+// A rotina física dá 1-3 EXP/dia em SHAPE (justo, treino diário)
+// Nível 100 = 10.000 EXP total (~3 anos de checks consistentes)
+const EXP_PER_LEVEL = 100; // EXP necessário por nível
+const MAX_LEVEL = 100;
+
 let mainExp = { SHAPE:0, GIRLS:0, SWAG:0, MIND:0, SOCIAL:0, CASH:0 };
-function loadExp() { let s = localStorage.getItem('MainStatsExp'); if(s) try { mainExp = {...mainExp,...JSON.parse(s)}; } catch(e){}
-  // ensure SOCIAL exists (migration from old saves)
+function loadExp() {
+  let s = localStorage.getItem('MainStatsExp');
+  if(s) try { mainExp = {...mainExp,...JSON.parse(s)}; } catch(e){}
   if (mainExp.SOCIAL === undefined) mainExp.SOCIAL = 0;
 }
 function saveExp() { localStorage.setItem('MainStatsExp', JSON.stringify(mainExp)); }
-function getLevel(stat) { let e = mainExp[stat]; for(let i=EXP_TABLE.length-1;i>=0;i--) if(e>=EXP_TABLE[i]) return i+1; return 1; }
-function getProgress(stat) {
-  let e = mainExp[stat], lv = getLevel(stat);
-  let lo = lv > 1 ? EXP_TABLE[lv-1] : 0, hi = EXP_TABLE[lv] ?? lo+1000;
-  let cur = e - lo, need = hi - lo;
-  return { cur, need, pct: need > 0 ? Math.min(100, (cur/need)*100) : 100, lv };
+
+function getLevel(stat) {
+  const exp = Math.max(0, mainExp[stat] || 0);
+  return Math.min(MAX_LEVEL, Math.max(1, Math.floor(exp / EXP_PER_LEVEL) + 1));
 }
+
+function getProgress(stat) {
+  const exp = Math.max(0, mainExp[stat] || 0);
+  const lv  = getLevel(stat);
+  const lo  = (lv - 1) * EXP_PER_LEVEL;
+  const cur = exp - lo;
+  const need = EXP_PER_LEVEL;
+  return { cur: Math.min(cur, need), need, pct: Math.min(100, (cur / need) * 100), lv };
+}
+
+// EXP por dificuldade de task — garante progressão visível
+function expForDifficulty(difficulty) {
+  if (difficulty === 'facil')   return 5;
+  if (difficulty === 'dificil') return 15;
+  return 8; // media
+}
+
 function addExp(stat, amount) {
-  let oldOv = getOverall();
-  let oldLv = getLevel(stat);
-  mainExp[stat] = (mainExp[stat]||0) + amount;
-  let newLv = getLevel(stat);
+  if (!amount || amount <= 0) return;
+  const oldOv  = getOverall();
+  const oldLv  = getLevel(stat);
+  mainExp[stat] = (mainExp[stat] || 0) + amount;
+  const newLv   = getLevel(stat);
   saveExp();
   if (newLv > oldLv) {
-    playSound('levelup'); confetti();
+    playSound('levelup');
+    if (newLv % 10 === 0 || newLv === MAX_LEVEL) confetti();
     showLevelUpModal(stat, newLv);
-    showAchievement(`⬆️ ${stat} → NV ${newLv}`, `Você evoluiu em ${stat}!`);
-    addToLog(`⬆️ LEVEL UP em ${stat} → Nível ${newLv}`, statColors[stat]);
+    showAchievement(`⬆️ ${statEmoji[stat]} ${stat} → Nv.${newLv}`, `Você evoluiu!`);
+    addToLog(`⬆️ ${statEmoji[stat]} ${stat} subiu para Nível ${newLv}/100`, statColors[stat]);
   }
-  let newOv = getOverall();
+  const newOv = getOverall();
   checkRankUp(oldOv, newOv);
   refreshStatsUI();
 }
@@ -1966,46 +2394,46 @@ document.getElementById('agendaAddBtn').onclick = () => {
 // ======================== ROUTINE DATA ==============================
 // ===================================================================
 const dailyTasks = [
-  { text:"Acordar, orar e arrumar a Cama 🛏️", time:"07h-07h10", exp:{MIND:3}, coins:1 },
-  { text:"Escovar os dentes e Lavar o rosto 🪥", time:"07h10-07h15", exp:{SWAG:2}, coins:1 },
-  { text:"Ir / Treinar na academia 🏋️", time:"07h15-08h20", exp:{SHAPE:10}, coins:2 },
-  { text:"Ir / Treinar futebol ⚽", time:"08h20-09h10", exp:{SHAPE:8}, coins:2 },
-  { text:"Tomar banho, higiene 💦", time:"09h10-09h20", exp:{SWAG:3}, coins:1 },
-  { text:"Café da manhã + checkar mensagens 🥣", time:"09h20-09h30", exp:{}, coins:0 },
-  { text:"Ajudar em casa (Lixo/Louça) 🧽", time:"09h30-09h40", exp:{SOCIAL:3}, coins:1 },
-  { text:"Estudar Inglês 🇺🇸", time:"09h40-10h25", exp:{MIND:6}, coins:2 },
-  { text:"Enviar currículo / like4like 📝", time:"10h25-10h40", exp:{CASH:4,SOCIAL:2}, coins:1 },
-  { text:"Desenvolver habilidades Extras 👑", time:"10h40-11h20", exp:{SWAG:4,MIND:2}, coins:2 },
-  { text:"Estudar Programação 💻", time:"11h20-12h30", exp:{MIND:8}, coins:2 },
-  { text:"Almoço 🍴", time:"12h30-12h50", exp:{}, coins:0 },
-  { text:"TRYAD - Minha empresa 🚀", time:"12h50-13h50", exp:{CASH:8,MIND:3}, coins:2 },
-  { text:"Escovar dentes e Ir Trabalhar 💼", time:"13h50-14h", exp:{SWAG:2}, coins:0 },
-  { text:"Trabalhar (Estágio 6h) 💼", time:"14h-20h", exp:{CASH:15}, coins:5 },
-  { text:"Lazer 🎮", time:"20h-20h30", exp:{}, coins:0 },
-  { text:"Beber 3L de água 💧", time:"Meta diária", exp:{SHAPE:4}, coins:2 },
-  { text:"Faculdade ADS 🎓", time:"20h30-23h", exp:{MIND:10}, coins:2 },
-  { text:"Jantar 🍴", time:"23h-23h30", exp:{}, coins:0 },
-  { text:"Treinin sx 🔥", time:"23h30-00h", exp:{SHAPE:4,GIRLS:5}, coins:2 }
+  { text:"Acordar, orar e arrumar a Cama 🛏️",       time:"07h-07h10",   exp:{},          coins:5  },
+  { text:"Escovar os dentes e Lavar o rosto 🪥",      time:"07h10-07h15", exp:{},          coins:3  },
+  { text:"Ir / Treinar na academia 🏋️",               time:"07h15-08h20", exp:{SHAPE:3},   coins:8  },
+  { text:"Ir / Treinar futebol ⚽",                   time:"08h20-09h10", exp:{SHAPE:2},   coins:6  },
+  { text:"Tomar banho, higiene 💦",                   time:"09h10-09h20", exp:{},          coins:3  },
+  { text:"Café da manhã + checkar mensagens 🥣",      time:"09h20-09h30", exp:{},          coins:2  },
+  { text:"Ajudar em casa (Lixo/Louça) 🧽",           time:"09h30-09h40", exp:{},          coins:5  },
+  { text:"Estudar Inglês 🇺🇸",                        time:"09h40-10h25", exp:{},          coins:8,  isEnglish:true },
+  { text:"Enviar currículo / like4like 📝",           time:"10h25-10h40", exp:{},          coins:5  },
+  { text:"Desenvolver habilidades Extras 👑",         time:"10h40-11h20", exp:{},          coins:8,  isSkill:true },
+  { text:"Estudar Programação 💻",                    time:"11h20-12h30", exp:{},          coins:10 },
+  { text:"Almoço 🍴",                                 time:"12h30-12h50", exp:{},          coins:2  },
+  { text:"TRYAD - Minha empresa 🚀",                  time:"12h50-13h50", exp:{},          coins:10 },
+  { text:"Escovar dentes e Ir Trabalhar 💼",          time:"13h50-14h",   exp:{},          coins:3  },
+  { text:"Trabalhar (Estágio 6h) 💼",                 time:"14h-20h",     exp:{},          coins:15 },
+  { text:"Lazer 🎮",                                  time:"20h-20h30",   exp:{},          coins:3  },
+  { text:"Beber 3L de água 💧",                       time:"Meta diária", exp:{SHAPE:1},   coins:5  },
+  { text:"Faculdade ADS 🎓",                          time:"20h30-23h",   exp:{},          coins:10 },
+  { text:"Jantar 🍴",                                 time:"23h-23h30",   exp:{},          coins:2  },
+  { text:"Treinin sx 🔥",                             time:"23h30-00h",   exp:{},          coins:5  }
 ];
 const weeklyTasks = [
-  { text:"Cortar unha dos pés e mãos ✂️", exp:{SWAG:8}, coins:5 },
-  { text:"Limpar meu quarto (Varrer e pano) 🧹", exp:{MIND:5,SOCIAL:3}, coins:5 },
-  { text:"Trocar fronhas e lençol da cama 🛏️", exp:{SWAG:6}, coins:5 },
-  { text:"Depilação (Barba/Barriga/Peito/Pé) 🪒", exp:{SWAG:8}, coins:5 },
-  { text:"Máscara facial - SkinCare 🧖", exp:{SWAG:6}, coins:5 },
-  { text:"Filme em família 🎬", exp:{SOCIAL:8}, coins:5 }
+  { text:"Cortar unha dos pés e mãos ✂️",            exp:{}, coins:10 },
+  { text:"Limpar meu quarto (Varrer e pano) 🧹",      exp:{}, coins:10 },
+  { text:"Trocar fronhas e lençol da cama 🛏️",        exp:{}, coins:10 },
+  { text:"Depilação (Barba/Barriga/Peito/Pé) 🪒",    exp:{}, coins:10 },
+  { text:"Máscara facial - SkinCare 🧖",              exp:{}, coins:10 },
+  { text:"Filme em família 🎬",                       exp:{}, coins:10 }
 ];
 const monthlyTasks = [
-  { text:"💶 R$250 - Luta (Boxe/Muay Thai)", exp:{SHAPE:20}, coins:20 },
-  { text:"💶 R$200 - Iphone 11 Pro Max", exp:{CASH:-5}, coins:0 },
-  { text:"💶 R$150 - Academia", exp:{SHAPE:10}, coins:0 },
-  { text:"💶 R$140 - Dentista", exp:{SWAG:15}, coins:20 },
-  { text:"💶 R$40 - Renovar Minoxidill", exp:{SWAG:8}, coins:10 },
-  { text:"💶 R$45 - Cortar o cabelo", exp:{SWAG:6}, coins:10 },
-  { text:"💶 R$30 - Plano internet 4g", exp:{CASH:-3}, coins:0 },
-  { text:"💶 R$30 - Pacote Itaú", exp:{CASH:-3}, coins:0 },
-  { text:"💶 R$20 - Assinatura CineFy.gg", exp:{}, coins:0 },
-  { text:"💶 R$29 - Pagar quem devo", exp:{CASH:5}, coins:10 }
+  { text:"💶 R$250 - Luta (Boxe/Muay Thai)",         exp:{}, coins:20 },
+  { text:"💶 R$200 - Iphone 11 Pro Max",             exp:{}, coins:0  },
+  { text:"💶 R$150 - Academia",                      exp:{}, coins:0  },
+  { text:"💶 R$140 - Dentista",                      exp:{}, coins:20 },
+  { text:"💶 R$40 - Renovar Minoxidill",             exp:{}, coins:10 },
+  { text:"💶 R$45 - Cortar o cabelo",                exp:{}, coins:10 },
+  { text:"💶 R$30 - Plano internet 4g",              exp:{}, coins:0  },
+  { text:"💶 R$30 - Pacote Itaú",                    exp:{}, coins:0  },
+  { text:"💶 R$20 - Assinatura CineFy.gg",           exp:{}, coins:0  },
+  { text:"💶 R$29 - Pagar quem devo",                exp:{}, coins:10 }
 ];
 const extraActivities = [
   { name:"🏋️ Treino extra na academia", exp:{SHAPE:10}, coins:10 },
@@ -2098,15 +2526,200 @@ function swagBonus() {
 // ===================================================================
 // =================== RANK SYSTEM (Solo Leveling) ====================
 // ===================================================================
+// ===================================================================
+// ======================== NOTEPAD SYSTEM ============================
+// ===================================================================
+const SKILLS = [
+  { id:'english',  label:'🇺🇸 Inglês',      icon:'🇺🇸' },
+  { id:'gastro',   label:'🍳 Gastronomia', icon:'🍳' },
+  { id:'cars',     label:'🚗 Carros',       icon:'🚗' },
+  { id:'dance',    label:'💃 Dança',        icon:'💃' },
+  { id:'fight',    label:'🥊 Luta',         icon:'🥊' },
+  { id:'spanish',  label:'🇪🇸 Espanhol',   icon:'🇪🇸' },
+];
+let notepadData = {};
+function loadNotepad() {
+  const s = localStorage.getItem('NotepadData_V21');
+  if (s) try { notepadData = JSON.parse(s); } catch(e) {}
+}
+function saveNotepad() { localStorage.setItem('NotepadData_V21', JSON.stringify(notepadData)); }
+
+function openNotepad(activeSkillId) {
+  if (!activeSkillId) activeSkillId = 'english';
+  // Remove any existing notepad
+  document.getElementById('notepadOverlay')?.remove();
+
+  const ov = document.createElement('div');
+  ov.className = 'notepad-overlay';
+  ov.id = 'notepadOverlay';
+
+  function renderNp() {
+    const entries = notepadData[activeSkillId] || [];
+    const skill = SKILLS.find(s => s.id === activeSkillId) || SKILLS[0];
+    const entryCount = entries.length;
+
+    ov.innerHTML = `
+      <div class="notepad-box">
+        <div class="notepad-header">
+          <div class="notepad-title">📓 DIÁRIO DE APRENDIZADO</div>
+          <button class="notepad-x" id="npClose">✕</button>
+        </div>
+        <div class="notepad-skill-tabs">
+          ${SKILLS.map(s => `
+            <div class="notepad-skill-tab ${s.id === activeSkillId ? 'active' : ''}" data-sid="${s.id}">
+              ${s.icon} ${s.label.split(' ')[1]}
+            </div>`).join('')}
+        </div>
+        <div class="notepad-entries" id="npEntries">
+          ${entryCount === 0
+            ? `<div style="text-align:center;color:var(--text-dim);padding:28px;font-size:0.8rem;">Nenhuma nota ainda.<br>Escreva o que você aprendeu!</div>`
+            : entries.slice().reverse().map((e, ri) => {
+                const realIdx = entryCount - 1 - ri;
+                return `<div class="notepad-entry">
+                  <button class="notepad-del" data-idx="${realIdx}">🗑️</button>
+                  <div class="notepad-entry-date">📅 ${e.date} · ${skill.label}</div>
+                  <div class="notepad-entry-text">${e.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+                </div>`;
+              }).join('')}
+        </div>
+        <div class="notepad-write">
+          <textarea class="notepad-textarea" id="npText"
+            placeholder="O que você aprendeu hoje em ${skill.label}?\nEx: aprendi o past perfect, vocabulário de carros, receita de frango..."></textarea>
+          <button class="notepad-save" id="npSave">💾 SALVAR NOTA</button>
+        </div>
+      </div>`;
+
+    ov.querySelector('#npClose').onclick = () => ov.remove();
+
+    ov.querySelectorAll('.notepad-skill-tab').forEach(tab => {
+      tab.onclick = () => { activeSkillId = tab.dataset.sid; renderNp(); };
+    });
+
+    ov.querySelectorAll('.notepad-del').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.idx);
+        notepadData[activeSkillId].splice(idx, 1);
+        saveNotepad();
+        renderNp();
+      };
+    });
+
+    ov.querySelector('#npSave').onclick = () => {
+      const txt = ov.querySelector('#npText').value.trim();
+      if (!txt) return;
+      if (!notepadData[activeSkillId]) notepadData[activeSkillId] = [];
+      const now = new Date();
+      const dateStr = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`;
+      notepadData[activeSkillId].push({ date: dateStr, text: txt });
+      saveNotepad();
+      playSound('task');
+      showAchievement(`📓 ${skill.label}`, 'Nota salva no diário!');
+      renderNp();
+    };
+
+    ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+  }
+
+  renderNp();
+  document.body.appendChild(ov);
+}
+
+function openSkillPicker(onSelect) {
+  document.getElementById('skillPickerOverlay')?.remove();
+  const ov = document.createElement('div');
+  ov.className = 'skill-picker-overlay';
+  ov.id = 'skillPickerOverlay';
+
+  // Exclude english from skill picker (that one opens directly)
+  const skills = SKILLS.filter(s => s.id !== 'english');
+
+  ov.innerHTML = `
+    <div class="skill-picker-box">
+      <div class="skill-picker-title">⚡ QUAL HABILIDADE VOCÊ VAI TREINAR?</div>
+      ${skills.map(s => `
+        <div class="skill-option" data-sid="${s.id}">
+          <span class="skill-option-icon">${s.icon}</span>
+          <span class="skill-option-name">${s.label}</span>
+          <span class="skill-option-count">${(notepadData[s.id]||[]).length} notas</span>
+        </div>`).join('')}
+      <button class="skill-picker-cancel">CANCELAR</button>
+    </div>`;
+
+  ov.querySelectorAll('.skill-option').forEach(el => {
+    el.onclick = () => { ov.remove(); if (onSelect) onSelect(el.dataset.sid); };
+  });
+  ov.querySelector('.skill-picker-cancel').onclick = () => ov.remove();
+  ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+  document.body.appendChild(ov);
+}
+
+// ===================================================================
+// ======================== RANK PANEL ================================
+// ===================================================================
+function openRankPanel() {
+  document.getElementById('rankPanelOverlay')?.remove();
+  const ov = document.createElement('div');
+  ov.className = 'rank-panel-overlay';
+  ov.id = 'rankPanelOverlay';
+
+  const ov2 = getOverall();
+  const currentRank = getCurrentRank(ov2);
+
+  ov.innerHTML = `
+    <div class="rank-panel-box">
+      <h2>⚡ SISTEMA DE RANKS ⚡</h2>
+      <div class="rank-panel-subtitle">
+        Overall = média das stats · Seu atual: <strong style="color:${currentRank.color};">RANK ${currentRank.label} (${ov2.toFixed(1)})</strong>
+      </div>
+      ${RANKS.map(r => {
+        const isCurrent = r.key === currentRank.key;
+        const isPast    = ov2 >= r.min;
+        const diff      = (r.min - ov2).toFixed(1);
+        return `
+          <div class="rank-row-item ${isCurrent ? 'is-current' : ''}"
+               style="--rc:${r.color};${isCurrent ? `border-color:${r.color};` : ''}">
+            <div class="rank-row-letter"
+                 style="color:${r.color};${isCurrent ? `text-shadow:0 0 18px ${r.color};` : ''}">
+              ${r.label}
+            </div>
+            <div class="rank-row-info">
+              <div class="rank-row-name" style="color:${isCurrent ? r.color : 'var(--text)'};">
+                ${r.desc}
+              </div>
+              <div class="rank-row-req">
+                Overall ≥ ${r.min}
+                ${isCurrent ? ' ← VOCÊ ESTÁ AQUI' : isPast ? ' ✅ Superado' : ` (faltam ${diff} pts)`}
+              </div>
+            </div>
+            ${isCurrent
+              ? `<span class="rank-current-tag"
+                        style="background:${r.bg};border:1px solid ${r.color};color:${r.color};">
+                   ATUAL
+                 </span>`
+              : isPast
+                ? `<span style="color:#22c55e;font-size:0.85rem;">✅</span>`
+                : ''}
+          </div>`;
+      }).join('')}
+      <button class="rank-panel-close">FECHAR</button>
+    </div>`;
+
+  ov.querySelector('.rank-panel-close').onclick = () => ov.remove();
+  ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+  document.body.appendChild(ov);
+}
+
+// RANKS baseados na média das 6 stats (escala 1-100)
 const RANKS = [
-  { key:'E',   label:'E',   min:1.0, color:'#9ca3af', bg:'rgba(100,100,120,0.15)', desc:'Comum'          },
-  { key:'D',   label:'D',   min:2.0, color:'#22c55e', bg:'rgba(34,197,94,0.1)',    desc:'Iniciante'       },
-  { key:'C',   label:'C',   min:3.0, color:'#3b82f6', bg:'rgba(59,130,246,0.1)',   desc:'Intermediário'   },
-  { key:'B',   label:'B',   min:4.0, color:'#a855f7', bg:'rgba(168,85,247,0.15)',  desc:'Avançado'        },
-  { key:'A',   label:'A',   min:5.5, color:'#eab308', bg:'rgba(234,179,8,0.15)',   desc:'Elite'           },
-  { key:'S',   label:'S',   min:7.0, color:'#f97316', bg:'rgba(249,115,22,0.15)',  desc:'Lendário'        },
-  { key:'SS',  label:'SS',  min:8.0, color:'#ef4444', bg:'rgba(239,68,68,0.2)',    desc:'Mítico'          },
-  { key:'SSS', label:'SSS', min:9.5, color:'#FFD700', bg:'linear-gradient(90deg,rgba(255,215,0,0.2),rgba(239,68,68,0.2))', desc:'DEUS' },
+  { key:'E',   label:'E',   min:1,  color:'#9ca3af', bg:'rgba(100,100,120,0.15)', desc:'Comum'         },
+  { key:'D',   label:'D',   min:10, color:'#22c55e', bg:'rgba(34,197,94,0.1)',    desc:'Iniciante'      },
+  { key:'C',   label:'C',   min:20, color:'#3b82f6', bg:'rgba(59,130,246,0.1)',   desc:'Intermediário'  },
+  { key:'B',   label:'B',   min:35, color:'#a855f7', bg:'rgba(168,85,247,0.15)',  desc:'Avançado'       },
+  { key:'A',   label:'A',   min:50, color:'#eab308', bg:'rgba(234,179,8,0.15)',   desc:'Elite'          },
+  { key:'S',   label:'S',   min:65, color:'#f97316', bg:'rgba(249,115,22,0.15)',  desc:'Lendário'       },
+  { key:'SS',  label:'SS',  min:80, color:'#ef4444', bg:'rgba(239,68,68,0.2)',    desc:'Mítico'         },
+  { key:'SSS', label:'SSS', min:95, color:'#FFD700', bg:'linear-gradient(90deg,rgba(255,215,0,0.2),rgba(239,68,68,0.2))', desc:'DEUS' },
 ];
 let lastRankKey = null;
 
@@ -2504,12 +3117,12 @@ function scheduleAgendaNotifications() {
 // ===================================================================
 function calcStats() {
   return {
-    SHAPE:  Math.min(100, getLevel('SHAPE') * 10),
-    GIRLS:  Math.min(100, getLevel('GIRLS') * 10),
-    SWAG:   Math.min(100, getLevel('SWAG') * 10 + swagBonus()),
-    MIND:   Math.min(100, getLevel('MIND') * 10),
-    SOCIAL: Math.min(100, getLevel('SOCIAL') * 10),
-    CASH:   Math.min(100, getLevel('CASH') * 10),
+    SHAPE:  Math.min(100, getLevel('SHAPE')),
+    GIRLS:  Math.min(100, getLevel('GIRLS')),
+    SWAG:   Math.min(100, getLevel('SWAG') + Math.min(10, swagBonus())),
+    MIND:   Math.min(100, getLevel('MIND')),
+    SOCIAL: Math.min(100, getLevel('SOCIAL')),
+    CASH:   Math.min(100, getLevel('CASH')),
   };
 }
 function getOverall() {
@@ -2523,7 +3136,7 @@ function refreshStatsUI() {
   const rank = getCurrentRank(ov);
   const ob = document.getElementById('overallBadge'); if(ob) ob.textContent = `OVERALL ${ov.toFixed(1)}`;
   const rb = document.getElementById('rankBadge');
-  if(rb) rb.outerHTML = `<span class="rank-badge-hero rank-${rank.key}" id="rankBadge" style="border-color:${rank.color};color:${rank.color};background:${rank.bg};">RANK <strong>${rank.label}</strong> · ${rank.desc}</span>`;
+  if(rb) rb.outerHTML = `<span class="rank-badge-hero rank-${rank.key}" id="rankBadge" onclick="openRankPanel()" title="Ver tabela de ranks" style="border-color:${rank.color};color:${rank.color};background:${rank.bg};">RANK <strong>${rank.label}</strong> · ${rank.desc}</span>`;
   updateCoinsUI();
   const sb = document.getElementById('statsBarsContainer'); if(sb) renderStatsBars(sb);
 }
@@ -2635,7 +3248,7 @@ function showHub() {
         <div class="avatar-frame" id="avatarFrame" title="Clique para trocar foto">
           ${avatarDataURL ? `<img src="${avatarDataURL}" alt="avatar">` : '<canvas id="fallbackAvatarCanvas" width="160" height="160"></canvas>'}
         </div>
-        ${(() => { const rank = getCurrentRank(getOverall()); return `<div class="rank-badge-hero rank-${rank.key}" style="border-color:${rank.color};color:${rank.color};background:${rank.bg};margin:10px auto 6px;display:inline-flex;">RANK <strong style="margin-left:4px;">${rank.label}</strong></div>`; })()}
+        ${(() => { const rank = getCurrentRank(getOverall()); return `<div class="rank-badge-hero rank-${rank.key}" onclick="openRankPanel()" title="Ver tabela de ranks" style="border-color:${rank.color};color:${rank.color};background:${rank.bg};margin:10px auto 6px;display:inline-flex;cursor:pointer;">RANK <strong style="margin-left:4px;">${rank.label}</strong></div>`; })()}
         <div style="font-family:var(--font-head);font-size:0.65rem;color:var(--gold);letter-spacing:3px;margin-bottom:6px;" id="heroNameDisp">${gameData.heroName}</div>
         <div class="avatar-level-bar"><div class="avatar-level-fill" style="width:${(getOverall()/10)*100}%"></div></div>
         <div class="avatar-upload-hint">Clique no avatar para trocar foto</div>
@@ -2725,8 +3338,69 @@ function renderRoutine() {
   const container = document.getElementById('routineItems');
   tasks.forEach((task, idx) => {
     const isDone = dataObj[idx] === true;
-    const expText = Object.entries(task.exp||{}).map(([k,v])=>`${k}+${v}`).join(' ');
+    const expText = Object.entries(task.exp||{}).filter(([,v])=>v>0).map(([k,v])=>`${k}+${v}`).join(' ');
     const item = document.createElement('div');
+
+    // ---- INGLÊS: opens notepad directly ----
+    if (task.isEnglish) {
+      item.className = `routine-item-special${isDone ? ' done' : ''}`;
+      item.innerHTML = `
+        <input type="checkbox" class="toggle-sw" ${isDone?'checked':''} ${isDone?'disabled':''} style="flex-shrink:0;">
+        ${task.time ? `<span class="routine-time">${task.time}</span>` : ''}
+        <span class="routine-text">${task.text}</span>
+        <div class="routine-rewards">
+          ${expText ? `<span class="routine-exp">✨${expText}</span>` : ''}
+          ${task.coins > 0 ? `<span class="routine-coin">+${task.coins}🪙</span>` : ''}
+        </div>
+        ${!isDone ? '<span class="open-hint">📓 ABRIR</span>' : ''}`;
+      if (!isDone) {
+        item.onclick = () => {
+          // Open notepad on english tab, mark done when closes
+          openNotepad('english');
+          // Mark done
+          for (let [stat, val] of Object.entries(task.exp||{})) if (val > 0) addExp(stat, val);
+          if (task.coins > 0) addCoins(task.coins);
+          playSound('task');
+          dataObj[idx] = true; saveRoutineData();
+          addToLog('✅ Inglês estudado — nota salva no diário', '#3b82f6');
+          renderRoutine();
+        };
+      }
+      container.appendChild(item);
+      return;
+    }
+
+    // ---- HABILIDADE EXTRA: picker → notepad ----
+    if (task.isSkill) {
+      item.className = `routine-item-special${isDone ? ' done' : ''}`;
+      item.innerHTML = `
+        <input type="checkbox" class="toggle-sw" ${isDone?'checked':''} ${isDone?'disabled':''} style="flex-shrink:0;">
+        ${task.time ? `<span class="routine-time">${task.time}</span>` : ''}
+        <span class="routine-text">${task.text}</span>
+        <div class="routine-rewards">
+          ${expText ? `<span class="routine-exp">✨${expText}</span>` : ''}
+          ${task.coins > 0 ? `<span class="routine-coin">+${task.coins}🪙</span>` : ''}
+        </div>
+        ${!isDone ? '<span class="open-hint">👑 ESCOLHER</span>' : ''}`;
+      if (!isDone) {
+        item.onclick = () => {
+          openSkillPicker((skillId) => {
+            openNotepad(skillId);
+            for (let [stat, val] of Object.entries(task.exp||{})) if (val > 0) addExp(stat, val);
+            if (task.coins > 0) addCoins(task.coins);
+            playSound('task');
+            dataObj[idx] = true; saveRoutineData();
+            const skill = SKILLS.find(s => s.id === skillId);
+            addToLog(`✅ Habilidade extra: ${skill?.label || skillId}`, '#eab308');
+            renderRoutine();
+          });
+        };
+      }
+      container.appendChild(item);
+      return;
+    }
+
+    // ---- TAREFA NORMAL ----
     item.className = `routine-item${isDone?' done':''}`;
     item.innerHTML = `
       <input type="checkbox" class="toggle-sw" ${isDone?'checked':''} ${isDone?'disabled':''}>
@@ -2817,36 +3491,33 @@ function renderExp() {
       sub.tasks.forEach(task => {
         const row = document.createElement('div'); row.className = `task-row ${task.difficulty||'media'} ${task.completed?'completed':''}`;
         const diffEmoji = task.difficulty==='facil'?'🟢':task.difficulty==='dificil'?'🔴':'🟡';
-        row.innerHTML = `<input type="checkbox" class="toggle-sw" style="transform:scale(0.85)" ${task.completed?'checked disabled':''}><span class="task-label">${diffEmoji} ${task.description}</span><span class="task-reward">+${task.coinReward}🪙</span>`;
+        const dispExp = expForDifficulty(task.difficulty);
+        row.innerHTML = `<input type="checkbox" class="toggle-sw" style="transform:scale(0.85)" ${task.completed?'checked disabled':''}><span class="task-label">${diffEmoji} ${task.description}</span><span class="task-reward">+${task.coinReward}🪙 +${dispExp}EXP</span>`;
         if (!task.completed) {
           const chk = row.querySelector('input');
           const apply = () => {
             if (chk.checked) {
               task.completed = true;
-              const taskExp = task.expReward || 10;
+              // EXP based on difficulty — guarantees visible level progress
+              const taskExp   = expForDifficulty(task.difficulty);
               const taskCoins = task.coinReward || 30;
               sub.expPoints = (sub.expPoints||0) + taskExp;
               let maxComp = 0; sub.tasks.forEach(t=>{if(t.completed&&t.levelRequired>maxComp)maxComp=t.levelRequired;});
               sub.currentLevel = Math.min(maxComp, sub.maxLevel);
               addCoins(taskCoins); playSound('task');
-              // Map to main stat
+              // Map category → main stat
               const catMap = {
-                // SHAPE: corpo, luta, esportes
                 'CORPO/SAÚDE':'SHAPE','LUTA':'SHAPE','ESPORTES':'SHAPE',
-                // GIRLS: relacionamento íntimo/romântico APENAS
                 'RELACIONAMENTO':'GIRLS',
-                // SOCIAL: redes sociais, família (vínculos e presença social)
                 'SOCIAL':'SOCIAL','FAMÍLIA':'SOCIAL',
-                // SWAG: aparência, habilidades do homem
                 'APARÊNCIA':'SWAG','HABILIDADES':'SWAG',
-                // MIND: livros, espiritualidade
                 'INTELIGÊNCIA':'MIND','ESPIRITUALIDADE':'MIND',
-                // CASH: dinheiro, bens
                 'DINHEIRO':'CASH'
               };
               const mStat = catMap[cat.name];
               if (mStat) addExp(mStat, taskExp);
-              showAchievement('🏅 '+task.description, `+${taskCoins} coins · +${taskExp} EXP`);
+              showAchievement('🏅 '+task.description, `+${taskCoins}🪙 · +${taskExp} EXP ${mStat||''}`);
+              addToLog(`✅ ${cat.icon} ${task.description} (+${taskExp} EXP ${mStat||''})`, statColors[mStat]||'#FFD700');
               saveGameData(); renderExp();
             }
           };
@@ -3366,13 +4037,12 @@ function init() {
   loadGameData(); loadCoins(); loadExp(); initRoutine();
   loadSwag(); loadAvatar(); loadFriends(); loadAgenda();
   loadLog(); loadMissions(); loadDungeon(); loadLastActive();
+  loadNotepad();
   loadTheme();
   setScreen('menu');
   refreshStatsUI();
   saveLastActive();
-  // Schedule notifications on load if permitted
   if (notifPermission === 'granted') scheduleAgendaNotifications();
-  // Check penalty after a tiny delay so screens load first
   setTimeout(() => checkPenalty(), 1500);
 }
 init();
